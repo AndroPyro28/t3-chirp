@@ -17,7 +17,7 @@ const index: NextPage<serverSidePropTypes> = ({message}: serverSidePropTypes) =>
 
 
     if(isLoading) return <div>loading...</div>
-    
+
     return <form onSubmit={(e) => {
         e.preventDefault();
         mutate(newPost);

@@ -6,11 +6,13 @@ import CreatePostWizard from "~/components/CreatePostWizard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWolfPackBattalion } from "@fortawesome/free-brands-svg-icons";
 import PostView from "~/components/PostView";
+import { useState } from "react";
 
 type serverSidePropTypes = {
   sample: string
 }
 const Home: NextPage<serverSidePropTypes> = ({sample}: serverSidePropTypes) => {
+
 
   const { data: posts, isLoading, isError } = api.post.getAll.useQuery();
 
