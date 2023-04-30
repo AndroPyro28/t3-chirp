@@ -10,8 +10,13 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id        String   @id @default(cuid())
+
+model Post {
+    id        String   @id @unique @default(cuid())
+    content   String   @db.VarChar(255)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    authorId String 
+
+    @@index([authorId])
 }

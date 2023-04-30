@@ -1,0 +1,7 @@
+.sample {
+    @apply flex gap-5 w-full p-5 h-24 items-center;
+}
+
+.sample > input {
+    @apply rounded-md text-black px-3 outline-none border bg-slate-200 w-full h-full;
+}
