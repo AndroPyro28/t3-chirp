@@ -3,13 +3,18 @@ import { clerkClient } from "@clerk/nextjs/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, publicProcedure, privateProcedure} from "~/server/api/trpc";
+import { CreatePostSchema } from "./dto/CreatePost.dto";
+import { UpdatePostSchema } from "./dto/UpdatePost.dto";
 
 export const postRouter = createTRPCRouter({
 
   getAll: publicProcedure.query( async ({ ctx }) => {
     const posts = await ctx.prisma.post.findMany({
       take: 100,
+      orderBy: {
+        createdAt: 'desc'
+      }
     });
 
     const filterUserForClient = (user: User) => ({
@@ -26,7 +31,6 @@ export const postRouter = createTRPCRouter({
 
     return posts.map(post => {
       const author = users.find(user => user.id === post.authorId)
-      console.log(author)
       if(!author) {
         throw new TRPCError({code: 'FORBIDDEN', message: 'Author for post not found'})
       }
@@ -42,10 +46,7 @@ export const postRouter = createTRPCRouter({
 
   }),
 
-  create: publicProcedure.input(z.object({
-    content: z.string(),
-    authorId: z.string()
-  })).mutation(async ({ctx, input}) => {
+  create: privateProcedure.input(CreatePostSchema).mutation(async ({ctx, input}) => {
     const createdPost = await ctx.prisma.post.create({
       data: {
         content: input.content,
@@ -57,7 +58,7 @@ export const postRouter = createTRPCRouter({
 
     return createdPost
   }),
-  delete: publicProcedure.input(z.string()).mutation( async ({input, ctx}) => {
+  delete: privateProcedure.input(z.string()).mutation( async ({input, ctx}) => {
     const deletedPost = await ctx.prisma.post.delete({
       where: {
         id: input
@@ -68,10 +69,7 @@ export const postRouter = createTRPCRouter({
     return deletedPost
   }),
 
-  update: publicProcedure.input(z.object({
-    content: z.string(),
-    postId: z.string()
-  })).mutation( async ({input, ctx}) => {
+  update: privateProcedure.input(UpdatePostSchema).mutation( async ({input, ctx}) => {
     const updatedPost = await ctx.prisma.post.update({
       where: {
         id: input.postId
@@ -84,5 +82,4 @@ export const postRouter = createTRPCRouter({
     
     return updatedPost
   })
-
 });

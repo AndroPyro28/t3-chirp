@@ -15,7 +15,7 @@ const CreatePostWizard = () => {
   if (!user) return null;
   const utils = api.useContext();
 
-  const { mutate, error, isLoading, reset } = api.post.create.useMutation({
+  const { mutate, error, isLoading, reset, data } = api.post.create.useMutation({
 
     async onMutate(newPost) {
       // Cancel outgoing fetches (so they don't overwrite our optimistic
@@ -44,9 +44,11 @@ const CreatePostWizard = () => {
       return { prevData };
     },
     onError(err, newPost, ctx) {
+      const errMessage = JSON.parse(err.message)[0].message;
+      alert(errMessage)
       utils.post.getAll.setData(undefined, ctx?.prevData);
     },
-    onSettled() {
+    onSuccess(data) {
       utils.post.getAll.invalidate();
     },
   });
@@ -63,6 +65,7 @@ const CreatePostWizard = () => {
         content,
         authorId: user.id,
       });
+
       reset();
     }
   };

@@ -1,4 +1,4 @@
-import { type NextPage } from "next";
+import type { NextPage } from "next";
 import Head from "next/head";
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import CreatePostWizard from "~/components/CreatePostWizard";
@@ -10,17 +10,13 @@ type serverSidePropTypes = {
 }
 const Home: NextPage<serverSidePropTypes> = ({sample}: serverSidePropTypes) => {
 
-
-
   const user = useUser();
   const {isLoaded, isSignedIn, user: userData} = user;
-
-  const buttonContent = isSignedIn ? (
+  const buttonContent = !isSignedIn ? (
     <SignInButton />
   ) : (
     <SignOutButton />
   );
-
 
   if (!isLoaded) return <Loader size={50} />;
 
@@ -50,6 +46,7 @@ const Home: NextPage<serverSidePropTypes> = ({sample}: serverSidePropTypes) => {
               )}
               <div className=" w-fit rounded-xl p-5 text-black">
                 {buttonContent}
+                {/* <SignInButton /> */}
               </div>
             </div>
           </div>
@@ -72,5 +69,4 @@ export const getServerSideProps = async (context:any) => {
       sample: 'hello world'
     }
   }
-
 }
