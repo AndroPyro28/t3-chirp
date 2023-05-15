@@ -49,8 +49,11 @@ const CreatePostWizard = () => {
       utils.post.getAll.setData(undefined, ctx?.prevData);
     },
     onSuccess(data) {
-      utils.post.getAll.invalidate();
+      //success statement
     },
+    onSettled: () => {
+      utils.post.getAll.invalidate();
+    }
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setContent((prev) => e.target.value);

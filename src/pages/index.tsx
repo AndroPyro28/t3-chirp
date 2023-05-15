@@ -4,6 +4,7 @@ import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import CreatePostWizard from "~/components/CreatePostWizard";
 import Loader from "~/components/Loader";
 import Posts from "~/components/Posts";
+import Link from "next/link";
 
 type serverSidePropTypes = {
   sample: string
@@ -31,6 +32,7 @@ const Home: NextPage<serverSidePropTypes> = ({sample}: serverSidePropTypes) => {
       <main className="flex h-screen justify-center">
         <div className=" flex w-full flex-col items-center rounded-md border-x border-blue-500 md:max-w-2xl">
           <div className="flex w-full flex-col items-center gap-3 rounded-md border-b">
+            <Link href={'/about'} >About</Link>
             {isSignedIn && <CreatePostWizard />}
 
             <div className="fixed right-3 top-3 flex items-center gap-5 rounded-xl border border-white bg-white px-5 py-2">

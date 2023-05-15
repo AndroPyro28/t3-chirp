@@ -28,12 +28,33 @@ import { getAuth } from "@clerk/nextjs/server";
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = (opts: CreateNextContextOptions) => {
+
+import { Ratelimit } from "@upstash/ratelimit"; // for deno: see above
+import { Redis } from "@upstash/redis";
+
+// Create a new ratelimiter, that allows 3 requests per 3 seconds
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(3, "3 s"),
+  analytics: true,
+  /**
+   * Optional prefix for the keys used in redis. This is useful if you want to share a redis
+   * instance with other applications and want to avoid key collisions. The default prefix is
+   * "@upstash/ratelimit"
+   */ 
+  prefix: "@upstash/ratelimit",
+});
+
+export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   
   const {req} = opts;
   const sesh = getAuth(req);
 
   const { userId } = sesh
+
+  const { success } = await ratelimit.limit(userId as string ?? '');
+  console.log(success)
+  if(!success) throw new TRPCError({code:"TOO_MANY_REQUESTS"})
 
   return {
     prisma,
