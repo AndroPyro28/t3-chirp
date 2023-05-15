@@ -21,7 +21,7 @@
 // }
 
 import { withClerkMiddleware, getAuth } from '@clerk/nextjs/server'
-import { NextResponse } from 'next/server'
+import { NextFetchEvent, NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 // Set the paths that don't require the user to be signed in
