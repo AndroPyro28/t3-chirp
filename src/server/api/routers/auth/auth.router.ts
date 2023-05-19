@@ -6,9 +6,8 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure, privateProcedure} from "~/server/api/trpc";
 
 export const authRouter = createTRPCRouter({
-
-    sampleAuth: publicProcedure.query(async ({ctx}) => {
-        console.log('hit', ctx)
-        return 'auth'
-    })
+    getMe: publicProcedure.query( async ({ ctx }) => {
+        console.log('hitted')
+        return 'this is auth1'
+      })
 });

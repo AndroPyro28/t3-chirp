@@ -1,6 +1,8 @@
 import { GetServerSideProps } from "next";
 const anotherGetServerSideProps: GetServerSideProps = async (context) => {
     console.log('execute anotherGetServerSideProps')
+
+    
   const session = {
     user: {
       name: "John Doe",
