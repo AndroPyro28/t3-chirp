@@ -1,6 +1,12 @@
 import { GetServerSideProps } from "next";
+import { api } from "./api";
+
+const getSomeStuff = ( ) => {
+  const {data} = api.auth.sampleAuth.useQuery();
+return data;
+}
 const getServerSideProps: GetServerSideProps = async (context) => {
-    console.log('execute getServerSideProps')
+
   const session = {
     user: {
       name: "John Doe",
